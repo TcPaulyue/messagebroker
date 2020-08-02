@@ -1,20 +1,20 @@
 package com.servicematrix.msg;
 
+import java.text.SimpleDateFormat;
+
 public class RoutingMessage extends ServerMessage {
     private long time;
 
-    private NormalClientMessage normalMessage;
+    private ClientMessage clientMessage;
 
     public RoutingMessage(String serverId) {
         super(serverId);
     }
 
-    public RoutingMessage() {
-    }
-    public RoutingMessage(String serverId, long time, NormalClientMessage normalMessage) {
+    public RoutingMessage(String serverId, long time, ClientMessage clientMessage) {
         super(serverId);
         this.time = time;
-        this.normalMessage = normalMessage;
+        this.clientMessage = clientMessage;
     }
 
     public long getTime() {
@@ -25,19 +25,19 @@ public class RoutingMessage extends ServerMessage {
         this.time = time;
     }
 
-    public NormalClientMessage getNormalMessage() {
-        return normalMessage;
+    public ClientMessage getClientMessage() {
+        return clientMessage;
     }
 
-    public void setNormalMessage(NormalClientMessage normalMessage) {
-        this.normalMessage = normalMessage;
+    public void setClientMessage(ClientMessage clientMessage) {
+        this.clientMessage = clientMessage;
     }
 
     @Override
     public String showMessage() {
         return "RoutingMessage{" +
-                "time=" + time +
-                ", normalMessage=" + normalMessage +
+                "time=" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time) +
+                ", clientMessage=" + clientMessage.toString() +
                 "} " + super.toString();
     }
 }

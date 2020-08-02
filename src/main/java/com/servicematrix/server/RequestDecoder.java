@@ -23,24 +23,17 @@ public class RequestDecoder extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext ctx,
                           ByteBuf in, List<Object> out) throws Exception {
-
-        if (in.readableBytes() < RequestDecoder.MESSAGE_LENGTH) {
-            return;
-        }
-
+        if (in.readableBytes() < RequestDecoder.MESSAGE_LENGTH) { return; }
         in.markReaderIndex();
         int messageLength = in.readInt();
-
         if (messageLength < 0) {
             ctx.close();
         }
-
         if (in.readableBytes() < messageLength) {
             in.resetReaderIndex();
         } else {
             byte[] messageBody = new byte[messageLength];
             in.readBytes(messageBody);
-
             try {
                 Object obj = util.decode(messageBody);
                 out.add(obj);

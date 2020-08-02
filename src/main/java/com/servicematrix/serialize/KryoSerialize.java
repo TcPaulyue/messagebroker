@@ -5,6 +5,7 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.pool.KryoPool;
 import com.google.common.io.Closer;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;

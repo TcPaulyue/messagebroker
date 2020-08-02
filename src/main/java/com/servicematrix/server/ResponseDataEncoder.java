@@ -8,19 +8,15 @@ import io.netty.handler.codec.MessageToByteEncoder;
 
 public class ResponseDataEncoder
         extends MessageToByteEncoder<Object> {
-
     private MessageCodecUtil util;
 
     ResponseDataEncoder(MessageCodecUtil messageCodecUtil) {
         this.util = messageCodecUtil;
     }
 
-//    private final Charset charset = Charset.forName("UTF-8");
-
+    //    private final Charset charset = Charset.forName("UTF-8");
     @Override
-    protected void encode(ChannelHandlerContext ctx,
-                          Object msg, ByteBuf out) throws Exception {
-
+    protected void encode(ChannelHandlerContext ctx, Object msg, ByteBuf out) throws Exception {
         util.encode(out, msg);
     }
 }

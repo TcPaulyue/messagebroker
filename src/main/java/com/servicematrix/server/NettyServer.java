@@ -14,10 +14,9 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 public class NettyServer {
 
-
     private static KryoCodecUtil util = new KryoCodecUtil(KryoPoolFactory.getKryoPoolInstance());
 
-    public static final String serverId = "NettyServer";
+    public static final String serverId = "MessageBroker_01";
 
     private int port;
 

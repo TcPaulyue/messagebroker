@@ -1,5 +1,7 @@
 package com.servicematrix.msg;
 
+import java.text.SimpleDateFormat;
+
 public class ReplyMessage extends ServerMessage {
     private String replyMessage;
 
@@ -8,11 +10,9 @@ public class ReplyMessage extends ServerMessage {
 
     private long time;
 
-    public ReplyMessage(String serverId) {
-        super(serverId);
-    }
 
-    public ReplyMessage(ServerMessageType serverMessageType) {
+    public ReplyMessage(ServerMessageType serverMessageType,String serverId) {
+        super(serverId);
         this.serverMessageType = serverMessageType;
     }
 
@@ -20,7 +20,7 @@ public class ReplyMessage extends ServerMessage {
     public String showMessage() {
         return "ReplyMessage{" +
                 "replyMessage='" + replyMessage + '\'' +
-                ", time=" + time +
+                ", time=" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time) +
                 "} " + super.toString();
     }
 
