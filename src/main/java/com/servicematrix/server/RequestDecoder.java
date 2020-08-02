@@ -1,6 +1,5 @@
 package com.servicematrix.server;
 
-import com.servicematrix.client.RequestData;
 import com.servicematrix.serialize.MessageCodecUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -13,11 +12,11 @@ public class RequestDecoder extends ByteToMessageDecoder {
 
     final public static int MESSAGE_LENGTH = MessageCodecUtil.MESSAGE_LENGTH;
 
- //   private final Charset charset = Charset.forName("UTF-8");
+    //   private final Charset charset = Charset.forName("UTF-8");
 
     private MessageCodecUtil util;
 
-    public RequestDecoder(MessageCodecUtil messageCodecUtil){
+    public RequestDecoder(MessageCodecUtil messageCodecUtil) {
         this.util = messageCodecUtil;
     }
 
@@ -49,14 +48,5 @@ public class RequestDecoder extends ByteToMessageDecoder {
                 ex.printStackTrace();
             }
         }
-
-//        RequestData data = new RequestData();
-//        data.setCount(in.readInt());
-//        int strLen = in.readInt();
-//        data.setTopic(
-//                in.readCharSequence(strLen, charset).toString());
-//        strLen = in.readInt();
-//        data.setMessage( in.readCharSequence(strLen, charset).toString());
-//        out.add(data);
     }
 }

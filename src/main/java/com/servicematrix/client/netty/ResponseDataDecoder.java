@@ -1,4 +1,4 @@
-package com.servicematrix.client;
+package com.servicematrix.client.netty;
 
 import com.servicematrix.serialize.MessageCodecUtil;
 import com.servicematrix.server.RequestDecoder;

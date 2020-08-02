@@ -1,7 +1,7 @@
-package com.servicematrix.client;
+package com.servicematrix.client.netty;
 
 
-import com.servicematrix.server.ResponseData;
+import com.servicematrix.msg.ServerMessage;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
@@ -10,14 +10,14 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg)
             throws Exception {
-        if(msg instanceof ResponseData) {
-            ResponseData responseData = (ResponseData) msg;
+        if(msg instanceof ServerMessage) {
+            ServerMessage responseMsg = (ServerMessage) msg;
             System.out.println("=============");
-            System.out.println(responseData.getIntValue() + "  " + responseData.getMsg());
+            System.out.println(responseMsg.showMessage());
         }else{
             String reply = (String) msg;
             System.out.println(reply);
         }
-       // ctx.close();
+
     }
 }

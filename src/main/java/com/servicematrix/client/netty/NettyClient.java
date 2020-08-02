@@ -1,4 +1,4 @@
-package com.servicematrix.client;
+package com.servicematrix.client.netty;
 
 import com.servicematrix.serialize.KryoCodecUtil;
 import com.servicematrix.serialize.KryoPoolFactory;
@@ -7,22 +7,20 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.util.AttributeKey;
 
 public abstract class NettyClient {
 
-    protected String host;
-    protected int port;
+    private String host;
+    private int port;
 
     protected ChannelFuture channelFuture;
 
-    protected EventLoopGroup workerGroup;
+    private EventLoopGroup workerGroup;
 
 
     private static KryoCodecUtil util = new KryoCodecUtil(KryoPoolFactory.getKryoPoolInstance());
 
-    protected abstract void sendMessage(String message,String  topic) throws InterruptedException;
-
+  //  protected abstract void sendMessage(String message,String  topic) throws InterruptedException;
 
 
 
@@ -36,7 +34,6 @@ public abstract class NettyClient {
             b.group(workerGroup)
             .channel(NioSocketChannel.class)
             .option(ChannelOption.SO_KEEPALIVE, true);
-//            .attr(AttributeKey.valueOf("type"), "coffeemachine");
             b.handler(new ChannelInitializer<SocketChannel>() {
 
                 @Override
@@ -52,7 +49,6 @@ public abstract class NettyClient {
                     System.out.println("客户端[" + f.channel().localAddress().toString() + "]已连接...");
                 }
         });
-        f.channel().attr(AttributeKey.valueOf("type")).setIfAbsent("coffeemachine");
         this.channelFuture = f;
     } catch (Exception e){
             e.printStackTrace();

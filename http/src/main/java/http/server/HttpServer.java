@@ -51,11 +51,8 @@ public class HttpServer {
                         }
                     });
 
-            ChannelFuture f = b.bind(port)
-                    .sync();
-            f.channel()
-                    .closeFuture()
-                    .sync();
+            ChannelFuture f = b.bind(port).sync();
+            f.channel().closeFuture().sync();
         } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();

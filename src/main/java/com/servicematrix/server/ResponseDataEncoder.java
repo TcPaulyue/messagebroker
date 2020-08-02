@@ -11,7 +11,7 @@ public class ResponseDataEncoder
 
     private MessageCodecUtil util;
 
-    ResponseDataEncoder(MessageCodecUtil messageCodecUtil){
+    ResponseDataEncoder(MessageCodecUtil messageCodecUtil) {
         this.util = messageCodecUtil;
     }
 
@@ -21,11 +21,6 @@ public class ResponseDataEncoder
     protected void encode(ChannelHandlerContext ctx,
                           Object msg, ByteBuf out) throws Exception {
 
-        util.encode(out,msg);
-//        out.writeInt(msg.getCount());
-//        out.writeInt(msg.getTopic().length());
-//        out.writeCharSequence(msg.getTopic(), charset);
-//        out.writeInt(msg.getMessage().length());
-//        out.writeCharSequence(msg.getMessage(),charset);
+        util.encode(out, msg);
     }
 }

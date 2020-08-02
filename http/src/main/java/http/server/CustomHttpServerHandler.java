@@ -20,6 +20,8 @@ import io.netty.handler.codec.http.HttpUtil;
 import io.netty.handler.codec.http.LastHttpContent;
 import io.netty.util.CharsetUtil;
 
+import java.util.concurrent.TimeUnit;
+
 public class CustomHttpServerHandler extends SimpleChannelInboundHandler<Object> {
 
     private HttpRequest request;
@@ -32,6 +34,11 @@ public class CustomHttpServerHandler extends SimpleChannelInboundHandler<Object>
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object msg) {
+        try {
+            TimeUnit.MILLISECONDS.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         if (msg instanceof HttpRequest) {
             HttpRequest request = this.request = (HttpRequest) msg;
 
