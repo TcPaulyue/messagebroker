@@ -28,7 +28,7 @@ public class personProxy {
     public void sendMessage(){
         try {
             messageHandler.sendMessage(id,System.currentTimeMillis()
-                    , new Location(20.00,30.00,30.00)
+                    , new Location(2.00,3.00,3.00)
                     ,"i want a cup of coffee"
                     ,"coffeeMachine");
         } catch (InterruptedException e) {

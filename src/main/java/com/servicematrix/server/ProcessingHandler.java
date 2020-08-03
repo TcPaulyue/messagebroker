@@ -10,6 +10,7 @@ import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -17,8 +18,11 @@ public class ProcessingHandler extends ChannelInboundHandlerAdapter {
 
     private ServerMessageFactory serverMessageFactory;
 
-    public ProcessingHandler(ServerMessageFactory serverMessageFactory) {
+    private String schedulingMethodName;
+
+    public ProcessingHandler(ServerMessageFactory serverMessageFactory, String schedulingMethodName) {
         this.serverMessageFactory = serverMessageFactory;
+        this.schedulingMethodName = "com.servicematrix.scheduling." + schedulingMethodName;
     }
 
     private static ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
@@ -66,11 +70,18 @@ public class ProcessingHandler extends ChannelInboundHandlerAdapter {
                     channelInfo.getChannel().writeAndFlush(replyMessage);
 
                 } else {
-                    if (schedulingMethod.judge(clientMessage, channelInfo)) {
-                        RoutingMessage routingMessage = (RoutingMessage) serverMessageFactory.newMessage(ServerMessageType.MULTICAST);
-                        routingMessage.setClientMessage(clientMessage);
-                        routingMessage.setTime(System.currentTimeMillis());
-                        channelInfo.getChannel().writeAndFlush(routingMessage);
+                    try {
+                        Class<?> clazz = Class.forName(schedulingMethodName);
+                        SchedulingMethod schedulingMethod1 = (SchedulingMethod) clazz.getDeclaredConstructor().newInstance();
+                        if (schedulingMethod1.judge(clientMessage, channelInfo)) {
+                            RoutingMessage routingMessage = (RoutingMessage) serverMessageFactory.newMessage(ServerMessageType.MULTICAST);
+                            routingMessage.setClientMessage(clientMessage);
+                            routingMessage.setTime(System.currentTimeMillis());
+                            channelInfo.getChannel().writeAndFlush(routingMessage);
+                        }
+                    } catch (ClassNotFoundException | InstantiationException
+                            | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+                        e.printStackTrace();
                     }
                 }
             });
@@ -82,17 +93,17 @@ public class ProcessingHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void handlerAdded(ChannelHandlerContext ctx){
+    public void handlerAdded(ChannelHandlerContext ctx) {
         channelGroup.add(ctx.channel());
     }
 
     @Override
-    public void handlerRemoved(ChannelHandlerContext ctx){
+    public void handlerRemoved(ChannelHandlerContext ctx) {
         channelGroup.remove(ctx.channel());
     }
 
-    public Boolean checkConnection(){
-        if(channelInfoMap.size()!=channelGroup.size())
+    public Boolean checkConnection() {
+        if (channelInfoMap.size() != channelGroup.size())
             return false;
         else
             return true;
