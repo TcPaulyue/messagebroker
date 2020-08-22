@@ -10,9 +10,10 @@
 
 
 ###接口
-
+发送请求：
 + bind() :向mq发送绑定请求
 + sendMessage(): 发送消息
 + unbind() : 和mq解除绑定
 
-
+接收请求：
+ (your class) extends ServerMessageHandler(){...}
