@@ -20,10 +20,6 @@
             </plugin>
         </plugins>
     </build>
-    <modules>
-        <module>http</module>
-        <module>demo</module>
-    </modules>
 
     <dependencies>
         <dependency>
@@ -31,6 +27,7 @@
             <artifactId>netty-all</artifactId>
             <version>4.1.10.Final</version>
         </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.esotericsoftware/kryo -->
         <dependency>
             <groupId>com.esotericsoftware</groupId>
@@ -41,6 +38,11 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>27.0-jre</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
         </dependency>
     </dependencies>
 

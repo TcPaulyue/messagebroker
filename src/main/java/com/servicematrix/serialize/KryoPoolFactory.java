@@ -13,9 +13,7 @@ public class KryoPoolFactory {
     private KryoFactory factory = () -> {
         Kryo kryo = new Kryo();
         kryo.setReferences(false);
-        kryo.register(LoginClientMessage.class);
-        kryo.register(NormalClientMessage.class);
-        kryo.register(LogoutClientMessage.class);
+        kryo.register(RequestMessage.class);
         kryo.register(ReplyMessage.class);
         kryo.register(RoutingMessage.class);
         kryo.setInstantiatorStrategy(new StdInstantiatorStrategy());

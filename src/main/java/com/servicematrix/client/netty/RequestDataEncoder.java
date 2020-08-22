@@ -21,10 +21,5 @@ public class RequestDataEncoder extends MessageToByteEncoder<Object> {
                           Object msg, ByteBuf out) throws Exception {
 
         util.encode(out,msg);
-//        out.writeInt(msg.getCount());
-//        out.writeInt(msg.getTopic().length());
-//        out.writeCharSequence(msg.getTopic(), charset);
-//        out.writeInt(msg.getMessage().length());
-//        out.writeCharSequence(msg.getMessage(),charset);
     }
 }

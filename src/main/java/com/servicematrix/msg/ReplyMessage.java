@@ -3,8 +3,8 @@ package com.servicematrix.msg;
 import java.text.SimpleDateFormat;
 
 public class ReplyMessage extends ServerMessage {
-    private String replyMessage;
 
+    private String replyMessage;
 
     private ServerMessageType serverMessageType;
 
