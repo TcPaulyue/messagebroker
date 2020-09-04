@@ -20,6 +20,10 @@ public  class Location{
                 '}';
     }
 
+    public boolean equals(Location location) {
+        return this.getX().equals(location.getX()) && this.getY().equals(location.getY()) && this.getZ().equals(location.getZ());
+    }
+
     public Double getX() {
         return x;
     }

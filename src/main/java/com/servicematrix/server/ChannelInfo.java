@@ -3,10 +3,12 @@ package com.servicematrix.server;
 import com.servicematrix.msg.Location;
 import io.netty.channel.Channel;
 
-import java.text.SimpleDateFormat;
 
 public class ChannelInfo {
+
     private Channel channel;
+
+    private String topic;
 
     private long time;
 
@@ -18,13 +20,33 @@ public class ChannelInfo {
         this.location = location;
     }
 
+    public ChannelInfo(Channel channel, String topic, long time, Location location) {
+        this.channel = channel;
+        this.topic = topic;
+        this.time = time;
+        this.location = location;
+    }
+
+    public ChannelInfo(Channel channel) {
+        this.channel = channel;
+    }
+
     @Override
     public String toString() {
         return "ChannelInfo{" +
-                "channel=" + channel +
-                ", time=" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time) +
+                ", channel=" + channel +
+                ", topic='" + topic + '\'' +
+                ", time=" + time +
                 ", location=" + location +
                 '}';
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 
     public Location getLocation() {

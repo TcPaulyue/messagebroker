@@ -1,8 +1,11 @@
 package com.servicematrix.server;
 
+
+import com.alibaba.fastjson.JSONObject;
 import com.servicematrix.msg.*;
 import com.servicematrix.scheduling.SchedulingMethod;
 import com.servicematrix.scheduling.SchedulingMethodDemo;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.group.ChannelGroup;
@@ -11,9 +14,14 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 import org.apache.log4j.Logger;
 
 
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static com.servicematrix.msg.RequestMessageType.ACCESSIBLE_MAP;
+import static com.servicematrix.msg.RequestMessageType.ENGINE;
 
 
 public class ProcessingHandler extends ChannelInboundHandlerAdapter {
@@ -24,6 +32,7 @@ public class ProcessingHandler extends ChannelInboundHandlerAdapter {
 
     private static final Logger logger = Logger.getLogger(ProcessingHandler.class);
 
+
     public ProcessingHandler(ServerMessageFactory serverMessageFactory, String schedulingMethodName) {
         this.serverMessageFactory = serverMessageFactory;
         this.schedulingMethodName = "com.servicematrix.scheduling." + schedulingMethodName;
@@ -33,17 +42,58 @@ public class ProcessingHandler extends ChannelInboundHandlerAdapter {
 
     private static ConcurrentHashMap<String, ChannelInfo> channelInfoMap = new ConcurrentHashMap<>();
 
+    private static Map<String, Map<String,Boolean>> accessibleMap = new HashMap<>();
+
+    private static Channel mapEngineChannel;
+
+    private Boolean is_send_Map_to_Engine(ChannelHandlerContext ctx, RequestMessage requestMessage) {
+        if (requestMessage.getRequestHeader().getMessageType().equals(ENGINE)||requestMessage.getRequestHeader().getMessageType().equals(ACCESSIBLE_MAP))
+            return false;
+        if (!channelInfoMap.keySet().contains(requestMessage.getKey())) {
+            channelInfoMap.put(requestMessage.getKey(), new ChannelInfo(ctx.channel()
+                    , requestMessage.getRequestHeader().getTopic()
+                    , requestMessage.getRequestHeader().getTime()
+                    , requestMessage.getRequestHeader().getLocation()));
+            return true;
+        } else {
+            Location location = channelInfoMap.get(requestMessage.getKey()).getLocation();
+            return !location.equals(requestMessage.getRequestHeader().getLocation());
+        }
+    }
+
+
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws UnsupportedEncodingException {
-        logger.info("===========================");
-        RequestMessage requestMessage = (RequestMessage)msg;
+
+
+        RequestMessage requestMessage = (RequestMessage) msg;
+
+        if (is_send_Map_to_Engine(ctx, requestMessage)) {
+            JSONObject jsonObject = new JSONObject();
+            channelInfoMap.forEach((key,value)-> jsonObject.put(key,value.getLocation()));
+            ReplyMessage replyMessage = (ReplyMessage) serverMessageFactory.newMessage(ServerMessageType.ACCESSIBLE_MAP);
+            replyMessage.setReplyMessage(jsonObject.toJSONString());
+            mapEngineChannel.writeAndFlush(replyMessage);
+        }
         switch (requestMessage.getRequestHeader().getMessageType()) {
+            case ENGINE: {
+                logger.info("===========================");
+                logger.info("AccessibleJudgmentEngine join in....");
+                mapEngineChannel = ctx.channel();
+                break;
+            }
+            case ACCESSIBLE_MAP:{
+                RequestAccessibleMessage requestAccessibleMessage =  (RequestAccessibleMessage) ((RequestMessage) msg).getRequestBody();
+                accessibleMap=requestAccessibleMessage.getAccessibleMap();
+                System.out.println(accessibleMap.toString());
+            }
             case BIND: {
                 System.out.println(ctx.channel().remoteAddress().toString());
                 logger.info("a new client -" + ctx.channel().remoteAddress() + " /log in...");
                 channelInfoMap.put(ctx.channel().remoteAddress().toString(), new ChannelInfo(ctx.channel()
                         , requestMessage.getRequestHeader().getTime()
                         , requestMessage.getRequestHeader().getLocation()));
+                //this.writeMsgToFile(channelInfoMap.get(ctx.channel().remoteAddress().toString()));
                 ReplyMessage replyMessage = (ReplyMessage) serverMessageFactory.newMessage(ServerMessageType.LOGIN_REPLY);
                 replyMessage.setTime(System.currentTimeMillis());
                 replyMessage.setReplyMessage("login succeed...");
@@ -53,13 +103,11 @@ public class ProcessingHandler extends ChannelInboundHandlerAdapter {
             case NORMAL:
                 logger.info("a connected client -" + ctx.channel().remoteAddress() + " /send message");
                 channelInfoMap.forEach((key, channelInfo) -> {
-                    SchedulingMethod schedulingMethod = new SchedulingMethodDemo();
                     if (key.equals(ctx.channel().remoteAddress().toString())) {
                         ReplyMessage replyMessage = (ReplyMessage) serverMessageFactory.newMessage(ServerMessageType.MULTICAST_REPLY);
                         replyMessage.setTime(System.currentTimeMillis());
                         replyMessage.setReplyMessage("message has been sent to messageBroker...");
                         channelInfo.getChannel().writeAndFlush(replyMessage);
-
                     } else {
                         try {
                             Class<?> clazz = Class.forName(schedulingMethodName);

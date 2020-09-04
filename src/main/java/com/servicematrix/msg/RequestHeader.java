@@ -8,12 +8,15 @@ public class RequestHeader {
 
     private Location location;
 
-    private String destination;
+    private String topic;
 
-    public RequestHeader(long time, Location location, String destination) {
+    public RequestHeader(long time, Location location, String topic) {
         this.time = time;
         this.location = location;
-        this.destination = destination;
+        this.topic = topic;
+    }
+
+    public RequestHeader() {
     }
 
     public long getTime() {
@@ -32,12 +35,12 @@ public class RequestHeader {
         this.location = location;
     }
 
-    public String getDestination() {
-        return destination;
+    public String getTopic() {
+        return topic;
     }
 
-    public void setDestination(String destination) {
-        this.destination = destination;
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 
     public RequestMessageType getMessageType() {
@@ -54,7 +57,7 @@ public class RequestHeader {
                 "time=" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time) +
                 ", messageType=" + messageType +
                 ", location=" + location.toString() +
-                ", destination='" + destination + '\'' +
+                ", topic='" + topic + '\'' +
                 '}';
     }
 }

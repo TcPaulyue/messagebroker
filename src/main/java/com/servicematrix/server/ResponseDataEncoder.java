@@ -6,8 +6,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
 
-public class ResponseDataEncoder
-        extends MessageToByteEncoder<Object> {
+public class ResponseDataEncoder extends MessageToByteEncoder<Object> {
     private MessageCodecUtil util;
 
     ResponseDataEncoder(MessageCodecUtil messageCodecUtil) {

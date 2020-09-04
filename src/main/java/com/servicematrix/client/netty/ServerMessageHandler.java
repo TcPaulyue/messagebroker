@@ -1,10 +1,7 @@
 package com.servicematrix.client.netty;
 
 
-import com.servicematrix.msg.ReplyMessage;
-import com.servicematrix.msg.RequestMessage;
-import com.servicematrix.msg.RoutingMessage;
-import com.servicematrix.msg.ServerMessage;
+import com.servicematrix.msg.*;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;

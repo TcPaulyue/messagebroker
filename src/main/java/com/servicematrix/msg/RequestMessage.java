@@ -12,6 +12,12 @@ public class RequestMessage {
         this.requestBody = requestBody;
     }
 
+    public RequestMessage(String key, RequestHeader requestHeader, RequestBody requestBody) {
+        this.key = key;
+        this.requestHeader = requestHeader;
+        this.requestBody = requestBody;
+    }
+
     public RequestHeader getRequestHeader() {
         return requestHeader;
     }

@@ -22,7 +22,7 @@ public class DemoClient {
         RequestHeader requestHeader = new RequestHeader(System.currentTimeMillis(),location,"server");
         String message = "bind to mq.";
         RequestBody requestBody = new RequestBody(message.getBytes());
-        clientMessageSender.bind(requestHeader,requestBody);
+        clientMessageSender.bind("person01",requestHeader,requestBody);
     }
 
     //向mq发送业务消息
@@ -38,7 +38,7 @@ public class DemoClient {
     void unbind(){
         Location location = new Location(1.00,2.00,3.00);
         RequestHeader requestHeader = new RequestHeader(System.currentTimeMillis(),location,"server");
-        clientMessageSender.unbind(requestHeader,null);
+        clientMessageSender.unbind("person01",requestHeader,null);
     }
 
     public static void main(String[] args) throws Exception {

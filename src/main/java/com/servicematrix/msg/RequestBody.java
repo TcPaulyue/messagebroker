@@ -10,6 +10,9 @@ public class RequestBody {
         this.body = body;
     }
 
+    public RequestBody() {
+    }
+
     public String getBody() throws UnsupportedEncodingException {
         return new String(body, "UTF-8");
     }
