@@ -15,7 +15,9 @@ import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.CorsHandler;
 
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.servicematrix.engine.ChannelInfoMapReceiver.clientsLocationMap;
@@ -27,10 +29,23 @@ public class RestServiceVerticle extends AbstractVerticle {
 
     private static Map<String, Map<String, Boolean>> accessibleMap = new HashMap<>();
 
-    public RestServiceVerticle(ClientMessageSender clientMessageSender) {
+    private static List<String> elements = Arrays.asList("coffeeMachine01","coffeeMachine02","paul");
+
+    private RestServiceVerticle(ClientMessageSender clientMessageSender) {
         this.clientMessageSender = clientMessageSender;
         this.bindToNetty();
+        this.initAccessibleMap();
         this.sendLocationMapToNetty();
+    }
+
+    public void initAccessibleMap(){
+        for(String s:elements){
+            Map<String,Boolean> stringBooleanMap = new HashMap<>();
+            for(String s1:elements){
+                stringBooleanMap.put(s1,false);
+            }
+            accessibleMap.put(s,stringBooleanMap);
+        }
     }
 
     private void bindToNetty() {
@@ -41,10 +56,8 @@ public class RestServiceVerticle extends AbstractVerticle {
     }
 
     private void sendLocationMapToNetty(){
-        Map<String,Boolean> stringBooleanMap = new HashMap<>();
-        stringBooleanMap.put("person",true);
-        stringBooleanMap.put("person01",false);
-        accessibleMap.put("coffeeMachine",stringBooleanMap);
+        accessibleMap.get("coffeeMachine01").put("paul",true);
+        accessibleMap.get("paul").put("coffeeMachine01",true);
         RequestAccessibleMessage requestAccessibleMessage = new RequestAccessibleMessage(accessibleMap);
         clientMessageSender.sendAccessibleMap(requestAccessibleMessage);
     }

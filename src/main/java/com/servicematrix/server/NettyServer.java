@@ -22,8 +22,6 @@ public class NettyServer {
 
     public static final String serverId = "MessageBroker_01";
 
-    private static final String schedulingMethodName = "SchedulingMethodDemo";
-
     private int port;
 
     private ServerMessageFactory serverMessageFactory;
@@ -58,7 +56,7 @@ public class NettyServer {
                                     new HttpRequestDecoder(),
                                     new ResponseDataEncoder(util),
                                     new HttpResponseEncoder(),
-                                    new ProcessingHandler(serverMessageFactory, schedulingMethodName));
+                                    new ProcessingHandler(serverMessageFactory));
                         }
                     }).option(ChannelOption.SO_BACKLOG, 128)
                     .childOption(ChannelOption.SO_KEEPALIVE, true);

@@ -2,13 +2,9 @@ package com.servicematrix.client;
 
 import com.servicematrix.client.netty.NettyClient;
 import com.servicematrix.client.netty.ServerMessageHandler;
-import com.servicematrix.example.ResponseMessageReceiver;
 import com.servicematrix.msg.*;
 import io.netty.channel.ChannelFuture;
 import org.apache.log4j.BasicConfigurator;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 
 public class ClientMessageSender{

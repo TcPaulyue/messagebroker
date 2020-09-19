@@ -4,7 +4,6 @@ package com.servicematrix.server;
 import com.alibaba.fastjson.JSONObject;
 import com.servicematrix.msg.*;
 import com.servicematrix.scheduling.SchedulingMethod;
-import com.servicematrix.scheduling.SchedulingMethodDemo;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -28,26 +27,23 @@ public class ProcessingHandler extends ChannelInboundHandlerAdapter {
 
     private ServerMessageFactory serverMessageFactory;
 
-    private String schedulingMethodName;
-
     private static final Logger logger = Logger.getLogger(ProcessingHandler.class);
 
 
-    public ProcessingHandler(ServerMessageFactory serverMessageFactory, String schedulingMethodName) {
+    public ProcessingHandler(ServerMessageFactory serverMessageFactory) {
         this.serverMessageFactory = serverMessageFactory;
-        this.schedulingMethodName = "com.servicematrix.scheduling." + schedulingMethodName;
     }
 
     private static ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
     private static ConcurrentHashMap<String, ChannelInfo> channelInfoMap = new ConcurrentHashMap<>();
 
-    private static Map<String, Map<String,Boolean>> accessibleMap = new HashMap<>();
+    private static Map<String, Map<String, Boolean>> accessibleMap = new HashMap<>();
 
     private static Channel mapEngineChannel;
 
     private Boolean is_send_Map_to_Engine(ChannelHandlerContext ctx, RequestMessage requestMessage) {
-        if (requestMessage.getRequestHeader().getMessageType().equals(ENGINE)||requestMessage.getRequestHeader().getMessageType().equals(ACCESSIBLE_MAP))
+        if (requestMessage.getRequestHeader().getMessageType().equals(ENGINE) || requestMessage.getRequestHeader().getMessageType().equals(ACCESSIBLE_MAP))
             return false;
         if (!channelInfoMap.keySet().contains(requestMessage.getKey())) {
             channelInfoMap.put(requestMessage.getKey(), new ChannelInfo(ctx.channel()
@@ -70,7 +66,7 @@ public class ProcessingHandler extends ChannelInboundHandlerAdapter {
 
         if (is_send_Map_to_Engine(ctx, requestMessage)) {
             JSONObject jsonObject = new JSONObject();
-            channelInfoMap.forEach((key,value)-> jsonObject.put(key,value.getLocation()));
+            channelInfoMap.forEach((key, value) -> jsonObject.put(key, value.getLocation()));
             ReplyMessage replyMessage = (ReplyMessage) serverMessageFactory.newMessage(ServerMessageType.ACCESSIBLE_MAP);
             replyMessage.setReplyMessage(jsonObject.toJSONString());
             mapEngineChannel.writeAndFlush(replyMessage);
@@ -82,15 +78,15 @@ public class ProcessingHandler extends ChannelInboundHandlerAdapter {
                 mapEngineChannel = ctx.channel();
                 break;
             }
-            case ACCESSIBLE_MAP:{
-                RequestAccessibleMessage requestAccessibleMessage =  (RequestAccessibleMessage) ((RequestMessage) msg).getRequestBody();
-                accessibleMap=requestAccessibleMessage.getAccessibleMap();
-                System.out.println(accessibleMap.toString());
+            case ACCESSIBLE_MAP: {
+                RequestAccessibleMessage requestAccessibleMessage = (RequestAccessibleMessage) ((RequestMessage) msg).getRequestBody();
+                accessibleMap = requestAccessibleMessage.getAccessibleMap();
+//                System.out.println(accessibleMap.toString());
             }
             case BIND: {
-                System.out.println(ctx.channel().remoteAddress().toString());
                 logger.info("a new client -" + ctx.channel().remoteAddress() + " /log in...");
                 channelInfoMap.put(ctx.channel().remoteAddress().toString(), new ChannelInfo(ctx.channel()
+                        , requestMessage.getRequestHeader().getTopic()
                         , requestMessage.getRequestHeader().getTime()
                         , requestMessage.getRequestHeader().getLocation()));
                 //this.writeMsgToFile(channelInfoMap.get(ctx.channel().remoteAddress().toString()));
@@ -109,19 +105,29 @@ public class ProcessingHandler extends ChannelInboundHandlerAdapter {
                         replyMessage.setReplyMessage("message has been sent to messageBroker...");
                         channelInfo.getChannel().writeAndFlush(replyMessage);
                     } else {
-                        try {
-                            Class<?> clazz = Class.forName(schedulingMethodName);
-                            SchedulingMethod schedulingMethod1 = (SchedulingMethod) clazz.getDeclaredConstructor().newInstance();
-                            if (schedulingMethod1.judge(requestMessage, channelInfo)) {
+                        if (channelInfo.getTopic().equals(((RequestMessage) msg).getRequestHeader().getTopic())) {
+                            if (accessibleMap.get(channelInfo.getTopic()).get(((RequestMessage) msg).getRequestHeader().getTopic())) {
                                 RoutingMessage routingMessage = (RoutingMessage) serverMessageFactory.newMessage(ServerMessageType.MULTICAST);
                                 routingMessage.setRequestMessage(requestMessage);
                                 routingMessage.setTime(System.currentTimeMillis());
                                 channelInfo.getChannel().writeAndFlush(routingMessage);
+                            } else {
+                                logger.info(((RequestMessage) msg).getKey() + "can not access to " + channelInfo.getChannel().remoteAddress());
                             }
-                        } catch (ClassNotFoundException | InstantiationException
-                                | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-                            e.printStackTrace();
                         }
+//                        try {
+//                            Class<?> clazz = Class.forName(schedulingMethodName);
+//                            SchedulingMethod schedulingMethod1 = (SchedulingMethod) clazz.getDeclaredConstructor().newInstance();
+//                            if (schedulingMethod1.judge(requestMessage, channelInfo)) {
+//                                RoutingMessage routingMessage = (RoutingMessage) serverMessageFactory.newMessage(ServerMessageType.MULTICAST);
+//                                routingMessage.setRequestMessage(requestMessage);
+//                                routingMessage.setTime(System.currentTimeMillis());
+//                                channelInfo.getChannel().writeAndFlush(routingMessage);
+//                            }
+//                        } catch (ClassNotFoundException | InstantiationException
+//                                | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+//                            e.printStackTrace();
+//                        }
                     }
                 });
                 break;

@@ -1,0 +1,19 @@
+{
+  "room": {
+    "name": "room_409",
+    "coffeeMachine": {
+      "key": "coffeeMachine_1",
+      "color": "black",
+      "influenceScope": {
+        "radius": 10
+      }
+    },
+    "people": {
+      "key": "abc",
+      "age": 18,
+      "influenceScope": {
+        "radius": 5
+      }
+    }
+  }
+}
