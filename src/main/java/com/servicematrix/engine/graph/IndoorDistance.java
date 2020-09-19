@@ -2,10 +2,47 @@ package com.servicematrix.engine.graph;
 
 import com.servicematrix.engine.model.*;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 public class IndoorDistance {
+    private static Map<String, InterLayerNode> interLayerNodeMap = new HashMap<>();
+    private static Map<String, PointToDoorNode> pointToDoorNodeMap = new HashMap<>();
+    private static Map<String, DoorToDoorNode> doorToDoorNodeMap = new HashMap<>();
+
+    public void init(Floor floor) {
+        interLayerNodeMap = new InterLayerBuilder().bulid(floor);
+        pointToDoorNodeMap = new PointToDoorBuilder().build(floor);
+        doorToDoorNodeMap = new DoorToDoorGraphBuilder().bulidGraph(floor);
+    }
+
+
+    public Map<String, InterLayerNode> getInterLayerNodeMap() {
+        return interLayerNodeMap;
+    }
+
+    public void setInterLayerNodeMap(Map<String, InterLayerNode> interLayerNodeMap) {
+        IndoorDistance.interLayerNodeMap = interLayerNodeMap;
+    }
+
+    public Map<String, PointToDoorNode> getPointToDoorNodeMap() {
+        return pointToDoorNodeMap;
+    }
+
+    public void setPointToDoorNodeMap(Map<String, PointToDoorNode> pointToDoorNodeMap) {
+        IndoorDistance.pointToDoorNodeMap = pointToDoorNodeMap;
+    }
+
+    public Map<String, DoorToDoorNode> getDoorToDoorNodeMap() {
+        return doorToDoorNodeMap;
+    }
+
+    public void setDoorToDoorNodeMap(Map<String, DoorToDoorNode> doorToDoorNodeMap) {
+        IndoorDistance.doorToDoorNodeMap = doorToDoorNodeMap;
+    }
+
+
     public static void main(String[] args) {
         Door doord1 = new Door("d1");
         Door doord2 = new Door("d2");
@@ -58,28 +95,34 @@ public class IndoorDistance {
         cell.getDoors().add(doord6);
         cell.getMcs().add(q);
         floor.getCellList().add(cell);
-//
-//        InterLayerBuilder interLayerBuilder = new InterLayerBuilder();
-//        Map<String, InterLayerNode> interLayerNodeMap = interLayerBuilder.bulid(floor);
 
+        IndoorDistance indoorDistance = new IndoorDistance();
+        indoorDistance.init(floor);
+        //cell直接的连通图
+        InterLayerBuilder interLayerBuilder = new InterLayerBuilder();
+        Map<String, InterLayerNode> interLayerNodeMap = interLayerBuilder.bulid(floor);
+
+        //cell中的智能设备和该cell的每个出口之间的距离map
         PointToDoorBuilder pointToDoorBuilder = new PointToDoorBuilder();
         Map<String, PointToDoorNode> pointToDoorNodeMap = pointToDoorBuilder.build(floor);
 
+        //该floor中的出口之间的带权连通图
         DoorToDoorGraphBuilder doorToDoorGraphBuilder = new DoorToDoorGraphBuilder();
         Map<String, DoorToDoorNode> doorToDoorNodeMap = doorToDoorGraphBuilder.bulidGraph(floor);
 
+        //起点和终点
         String startMc = "p";
         String endMc = "q";
 
         Set<Door> startDoors = pointToDoorNodeMap.get(startMc).getDoorInfo().keySet();
         Set<Door> endDoors = pointToDoorNodeMap.get(endMc).getDoorInfo().keySet();
 
-        startDoors.forEach(startDoor-> endDoors.forEach(endDoor->{
-            Dijkstra test=new Dijkstra();
-            DoorToDoorNode start=test.init(startDoor.getName(),doorToDoorNodeMap);
+        startDoors.forEach(startDoor -> endDoors.forEach(endDoor -> {
+            Dijkstra test = new Dijkstra();
+            DoorToDoorNode start = test.init(startDoor.getName(), doorToDoorNodeMap);
             test.computePath(start);
-            System.out.println(startDoor.getName()+"->"+endDoor.getName()+"  distance: "+test.getPathDistance(endDoor.getName())
-                + "  path: "+test.getPathInfo(endDoor.getName()));
+            System.out.println(startDoor.getName() + "->" + endDoor.getName() + "  distance: " + test.getPathDistance(endDoor.getName())
+                    + "  path: " + test.getPathInfo(endDoor.getName()));
         }));
 
 //        Dijkstra test=new Dijkstra();

@@ -10,16 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 public class InterLayerBuilder {
-    private Map<String, InterLayerNode> interLayerNodeHashMap = new HashMap<>();
-
-    public Map<String, InterLayerNode> getInterLayerNodeHashMap() {
-        return interLayerNodeHashMap;
-    }
-
-    public void setInterLayerNodeHashMap(Map<String, InterLayerNode> interLayerNodeHashMap) {
-        this.interLayerNodeHashMap = interLayerNodeHashMap;
-    }
-
     public Map<String,InterLayerNode> bulid(Floor floor){
         List<Cell> cellList = floor.getCellList();
         Map<String,InterLayerNode> interLayerNodeMap = new HashMap<>();
@@ -40,7 +30,6 @@ public class InterLayerBuilder {
                 }
             }
         }
-        this.interLayerNodeHashMap = interLayerNodeMap;
         return interLayerNodeMap;
     }
 }

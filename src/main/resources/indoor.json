@@ -1,0 +1,47 @@
+{
+  "building": {
+    "name": "building-01",
+    "floors": [
+      {
+        "floor-01": {
+          "name": "floor-layer-1",
+          "cells": [
+            {
+              "cell-R1": {
+                "door2": [
+                  {
+                    "d1": {
+                      "name": "d1",
+                      "location": "ab"
+                    }
+                  }
+                ],
+                "mcs": null
+              }
+            },
+            {
+              "cell-R2": {
+                "door2": [
+                  {
+                    "d2": {
+                      "name": "d2",
+                      "location": "ab"
+                    }
+                  }
+                ],
+                "mcs": null
+              }
+            },
+            {
+
+            }
+          ]
+        },
+        "floor-02": {
+        },
+        "floor-03": {
+        }
+      }
+    ]
+  }
+}
