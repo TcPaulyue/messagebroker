@@ -27,7 +27,7 @@ public class RestServiceVerticle extends AbstractVerticle {
 
     private ClientMessageSender clientMessageSender;
 
-    private static Map<String, Map<String, Boolean>> accessibleMap = new HashMap<>();
+    private static Map<String, Map<String, Double>> accessibleMap = new HashMap<>();
 
     private static List<String> elements = Arrays.asList("coffeeMachine01","coffeeMachine02","paul");
 
@@ -40,9 +40,9 @@ public class RestServiceVerticle extends AbstractVerticle {
 
     public void initAccessibleMap(){
         for(String s:elements){
-            Map<String,Boolean> stringBooleanMap = new HashMap<>();
+            Map<String,Double> stringBooleanMap = new HashMap<>();
             for(String s1:elements){
-                stringBooleanMap.put(s1,false);
+                stringBooleanMap.put(s1,0.0);
             }
             accessibleMap.put(s,stringBooleanMap);
         }
@@ -56,8 +56,8 @@ public class RestServiceVerticle extends AbstractVerticle {
     }
 
     private void sendLocationMapToNetty(){
-        accessibleMap.get("coffeeMachine01").put("paul",true);
-        accessibleMap.get("paul").put("coffeeMachine01",true);
+        accessibleMap.get("coffeeMachine01").put("paul",16.0);
+        accessibleMap.get("paul").put("coffeeMachine01",16.0);
         RequestAccessibleMessage requestAccessibleMessage = new RequestAccessibleMessage(accessibleMap);
         clientMessageSender.sendAccessibleMap(requestAccessibleMessage);
     }

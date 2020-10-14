@@ -28,11 +28,11 @@ public class ChannelInfoMapReceiver extends ServerMessageHandler {
     @Override
     public void ackMessage(String msg) {
         JSONObject locationMap = JSONObject.parseObject(msg);
-        locationMap.forEach((key,value)->{
-            JSONObject a = JSONObject.parseObject(value.toString());
-            Location location = new Location(a.getDouble("x"),a.getDouble("y"),a.getDouble("z"));
-            clientsLocationMap.put(key,location);
-        });
+//        locationMap.forEach((key,value)->{
+//            JSONObject a = JSONObject.parseObject(value.toString());
+//            Location location = new Location(a.getDouble("x"),a.getDouble("y"),a.getDouble("z"));
+//            clientsLocationMap.put(key,location);
+//        });
         this.updateAccessibleMap();
     }
 }

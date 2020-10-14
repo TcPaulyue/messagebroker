@@ -14,7 +14,6 @@ import org.apache.log4j.Logger;
 
 
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -38,7 +37,7 @@ public class ProcessingHandler extends ChannelInboundHandlerAdapter {
 
     private static ConcurrentHashMap<String, ChannelInfo> channelInfoMap = new ConcurrentHashMap<>();
 
-    private static Map<String, Map<String, Boolean>> accessibleMap = new HashMap<>();
+    private static Map<String, Map<String, Double>> accessibleMap = new HashMap<>();
 
     private static Channel mapEngineChannel;
 
@@ -61,32 +60,32 @@ public class ProcessingHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws UnsupportedEncodingException {
 
-
         RequestMessage requestMessage = (RequestMessage) msg;
 
-        if (is_send_Map_to_Engine(ctx, requestMessage)) {
-            JSONObject jsonObject = new JSONObject();
-            channelInfoMap.forEach((key, value) -> jsonObject.put(key, value.getLocation()));
-            ReplyMessage replyMessage = (ReplyMessage) serverMessageFactory.newMessage(ServerMessageType.ACCESSIBLE_MAP);
-            replyMessage.setReplyMessage(jsonObject.toJSONString());
-            mapEngineChannel.writeAndFlush(replyMessage);
-        }
+//        if (is_send_Map_to_Engine(ctx, requestMessage)) {
+//            JSONObject jsonObject = new JSONObject();
+//            channelInfoMap.forEach((key, value) -> jsonObject.put(key, value.getLocation()));
+//            ReplyMessage replyMessage = (ReplyMessage) serverMessageFactory.newMessage(ServerMessageType.ACCESSIBLE_MAP);
+//            replyMessage.setReplyMessage(jsonObject.toJSONString());
+//            mapEngineChannel.writeAndFlush(replyMessage);
+//        }
         switch (requestMessage.getRequestHeader().getMessageType()) {
             case ENGINE: {
                 logger.info("===========================");
-                logger.info("AccessibleJudgmentEngine join in....");
+                logger.info("SpaceMappingEngine join in....");
                 mapEngineChannel = ctx.channel();
                 break;
             }
             case ACCESSIBLE_MAP: {
                 RequestAccessibleMessage requestAccessibleMessage = (RequestAccessibleMessage) ((RequestMessage) msg).getRequestBody();
                 accessibleMap = requestAccessibleMessage.getAccessibleMap();
-//                System.out.println(accessibleMap.toString());
+                System.out.println(accessibleMap.toString());
+                break;
             }
             case BIND: {
                 logger.info("a new client -" + ctx.channel().remoteAddress() + " /log in...");
                 channelInfoMap.put(ctx.channel().remoteAddress().toString(), new ChannelInfo(ctx.channel()
-                        , requestMessage.getRequestHeader().getTopic()
+                        , requestMessage.getKey()
                         , requestMessage.getRequestHeader().getTime()
                         , requestMessage.getRequestHeader().getLocation()));
                 //this.writeMsgToFile(channelInfoMap.get(ctx.channel().remoteAddress().toString()));
@@ -105,15 +104,11 @@ public class ProcessingHandler extends ChannelInboundHandlerAdapter {
                         replyMessage.setReplyMessage("message has been sent to messageBroker...");
                         channelInfo.getChannel().writeAndFlush(replyMessage);
                     } else {
-                        if (channelInfo.getTopic().equals(((RequestMessage) msg).getRequestHeader().getTopic())) {
-                            if (accessibleMap.get(channelInfo.getTopic()).get(((RequestMessage) msg).getRequestHeader().getTopic())) {
-                                RoutingMessage routingMessage = (RoutingMessage) serverMessageFactory.newMessage(ServerMessageType.MULTICAST);
-                                routingMessage.setRequestMessage(requestMessage);
-                                routingMessage.setTime(System.currentTimeMillis());
-                                channelInfo.getChannel().writeAndFlush(routingMessage);
-                            } else {
-                                logger.info(((RequestMessage) msg).getKey() + "can not access to " + channelInfo.getChannel().remoteAddress());
-                            }
+                        if (channelInfo.getkey().equals(((RequestMessage) msg).getRequestHeader().getTopic())) {
+                            RoutingMessage routingMessage = (RoutingMessage) serverMessageFactory.newMessage(ServerMessageType.MULTICAST);
+                            routingMessage.setRequestMessage(requestMessage);
+                            routingMessage.setTime(System.currentTimeMillis());
+                            channelInfo.getChannel().writeAndFlush(routingMessage);
                         }
 //                        try {
 //                            Class<?> clazz = Class.forName(schedulingMethodName);

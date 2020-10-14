@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+
 public class IndoorDistance {
     private static Map<String, InterLayerNode> interLayerNodeMap = new HashMap<>();
     private static Map<String, PointToDoorNode> pointToDoorNodeMap = new HashMap<>();
@@ -43,6 +44,8 @@ public class IndoorDistance {
     }
 
 
+
+
     public static void main(String[] args) {
         Door doord1 = new Door("d1");
         Door doord2 = new Door("d2");
@@ -53,8 +56,8 @@ public class IndoorDistance {
         Door doorv7 = new Door("v7");
         Door doorv8 = new Door("v8");
 
-        String p = "p";
-        String q = "q";
+        String p = "paul";
+        String q = "coffeeMachine01";
 
         Floor floor = new Floor();
         Cell cell = new Cell("R1");
@@ -125,10 +128,5 @@ public class IndoorDistance {
                     + "  path: " + test.getPathInfo(endDoor.getName()));
         }));
 
-//        Dijkstra test=new Dijkstra();
-//        DoorToDoorNode start=test.init("d3",doorToDoorNodeMap);
-//        test.computePath(start);
-//        test.printPathInfo();
-        //test.getPathInfo("d6");
     }
 }

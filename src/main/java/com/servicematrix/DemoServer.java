@@ -1,4 +1,4 @@
-package com.servicematrix.example;
+package com.servicematrix;
 
 import com.servicematrix.server.NettyServer;
 

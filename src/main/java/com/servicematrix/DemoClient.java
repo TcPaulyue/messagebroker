@@ -1,4 +1,4 @@
-package com.servicematrix.example;
+package com.servicematrix;
 
 import com.servicematrix.client.ClientMessageSender;
 import com.servicematrix.msg.Location;
@@ -22,13 +22,13 @@ public class DemoClient {
         RequestHeader requestHeader = new RequestHeader(System.currentTimeMillis(),location,"server");
         String message = "bind to mq.";
         RequestBody requestBody = new RequestBody(message.getBytes());
-        clientMessageSender.bind("person01",requestHeader,requestBody);
+        clientMessageSender.bind("coffeeMachine01",requestHeader,requestBody);
     }
 
     //向mq发送业务消息
     void sendMessage(){
         Location location = new Location(1.00,2.00,3.00);
-        RequestHeader requestHeader = new RequestHeader(System.currentTimeMillis(),location,"coffeeMachine");
+        RequestHeader requestHeader = new RequestHeader(System.currentTimeMillis(),location,"paul");
         String message = "i want a cup of coffee";
         RequestBody requestBody = new RequestBody(message.getBytes());
         clientMessageSender.sendMessage(requestHeader,requestBody);
@@ -38,7 +38,7 @@ public class DemoClient {
     void unbind(){
         Location location = new Location(1.00,2.00,3.00);
         RequestHeader requestHeader = new RequestHeader(System.currentTimeMillis(),location,"server");
-        clientMessageSender.unbind("person01",requestHeader,null);
+        clientMessageSender.unbind("coffeeMachine01",requestHeader,null);
     }
 
     public static void main(String[] args) throws Exception {

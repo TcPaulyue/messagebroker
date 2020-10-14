@@ -8,7 +8,7 @@ public class ChannelInfo {
 
     private Channel channel;
 
-    private String topic;
+    private String key;
 
     private long time;
 
@@ -20,9 +20,9 @@ public class ChannelInfo {
         this.location = location;
     }
 
-    public ChannelInfo(Channel channel, String topic, long time, Location location) {
+    public ChannelInfo(Channel channel, String key, long time, Location location) {
         this.channel = channel;
-        this.topic = topic;
+        this.key = key;
         this.time = time;
         this.location = location;
     }
@@ -35,18 +35,18 @@ public class ChannelInfo {
     public String toString() {
         return "ChannelInfo{" +
                 ", channel=" + channel +
-                ", topic='" + topic + '\'' +
+                ", key='" + key + '\'' +
                 ", time=" + time +
                 ", location=" + location +
                 '}';
     }
 
-    public String getTopic() {
-        return topic;
+    public String getkey() {
+        return key;
     }
 
-    public void setTopic(String topic) {
-        this.topic = topic;
+    public void setkey(String key) {
+        this.key = key;
     }
 
     public Location getLocation() {
