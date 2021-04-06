@@ -24,7 +24,7 @@ public class RequestBody {
     @Override
     public String toString() {
         return "RequestBody{" +
-                "body=" + Arrays.toString(body) +
+                "body=" + new String(body) +
                 '}';
     }
 

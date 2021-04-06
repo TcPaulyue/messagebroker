@@ -35,7 +35,7 @@
                         <configuration>
                             <archive>
                                 <manifest>
-                                    <mainClass>com.servicematrix.DemoServer</mainClass>
+                                    <mainClass>com.servicematrix.matrixmq.demo.DemoClient0</mainClass>
                                 </manifest>
                             </archive>
                             <descriptorRefs>
@@ -55,6 +55,7 @@
             </build>
         </profile>
     </profiles>
+
     <dependencies>
         <dependency>
             <groupId>io.netty</groupId>
@@ -67,6 +68,11 @@
             <artifactId>kryo</artifactId>
             <version>4.0.0</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ch.hsr</groupId>-->
+<!--            <artifactId>geohash</artifactId>-->
+<!--            <version>1.4.0</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>

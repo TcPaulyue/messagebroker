@@ -16,12 +16,18 @@ public class MessageHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg)
-            throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         BaseMessage message = (BaseMessage)msg;
+        logger.info(message);
         BaseMessage result =  messageConsumer.handleMessage(message);
         if(result!=null)
-            ctx.writeAndFlush(result);
+            ctx.writeAndFlush(result).addListener(future -> {
+                if(future.isSuccess()){
+                    logger.info(result.toString()+" sent to broker...");
+                }else{
+                    logger.info(result.toString()+ " failed ...");
+                }
+            });
 
     }
 

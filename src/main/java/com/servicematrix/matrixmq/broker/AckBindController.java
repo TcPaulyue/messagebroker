@@ -1,6 +1,8 @@
 package com.servicematrix.matrixmq.broker;
 
 
+import com.servicematrix.matrixmq.broker.applicationContext.ApplicationContextCluster;
+import com.servicematrix.matrixmq.broker.clientCluster.RemoteClientCluster;
 import com.servicematrix.matrixmq.msg.broker.AckBindMessage;
 import com.servicematrix.matrixmq.msg.client.BindMessage;
 import io.netty.channel.Channel;
@@ -25,7 +27,7 @@ public class AckBindController implements Runnable {
             BindMessage bindMessage = AckBindQueue.getBindMessage();
            // System.out.println(bindMessage);
             if(bindMessage!=null){
-                Channel channel = ClientCluster.getChannel(bindMessage.getRequestHeader().getTopic(),bindMessage.getRequestHeader().getMsgId());
+                Channel channel = RemoteClientCluster.getChannel(bindMessage.getChannelId());
                 if(channel!=null){
                     AckBindMessage ackBindMessage = new AckBindMessage();
                     ackBindMessage.setBrokerId(BROKERID);

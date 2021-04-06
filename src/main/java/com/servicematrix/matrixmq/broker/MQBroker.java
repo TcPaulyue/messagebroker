@@ -1,28 +1,31 @@
 package com.servicematrix.matrixmq.broker;
 
+import com.servicematrix.matrixmq.broker.clientCluster.RemoteClientInfo;
+import com.servicematrix.matrixmq.broker.strategy.*;
 import com.servicematrix.matrixmq.netty.RequestDataDecoder;
 import com.servicematrix.matrixmq.netty.ResponseDataEncoder;
 import com.servicematrix.matrixmq.serialize.KryoCodecUtil;
 import com.servicematrix.matrixmq.serialize.KryoPoolFactory;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Logger;
+
+import static com.servicematrix.matrixmq.broker.MessageBrokerHandler.executorService;
 
 public class MQBroker {
     public static final String BROKERID = "MATRIXMQ_01";
 
-    private int port;
+    private final int port;
 
-    private static KryoCodecUtil util = new KryoCodecUtil(KryoPoolFactory.getKryoPoolInstance());
-
+    private static final KryoCodecUtil util = new KryoCodecUtil(KryoPoolFactory.getKryoPoolInstance());
 
     private boolean isRunning = false;
 
@@ -30,7 +33,7 @@ public class MQBroker {
         this.port = port;
     }
 
-    public void run(int concurrentNum) {
+    public void run() {
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
@@ -52,16 +55,21 @@ public class MQBroker {
             ChannelFuture f = null;
             try {
                 f = b.bind(port).sync();
+                f.addListener((ChannelFutureListener) channelFuture -> {
+                    if(channelFuture.isDone()){
+                        System.out.println("bind port.");
+                    }
+                    if(channelFuture.isSuccess()){
+                        System.out.println("bind port succeed.");
+                    }else{
+                        System.out.println("bind port failed");
+                    }
+                });
                 isRunning = true;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            ExecutorService executorService = Executors.newFixedThreadPool(concurrentNum*3);
-            for(int i =0;i<concurrentNum;i++){
-                executorService.execute(new AckBindController());
-                executorService.execute(new RequestMessageController());
-                executorService.execute(new RequestMessageCacheController());
-            }
+            executorService.execute(new AckBindController());
             f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -72,9 +80,22 @@ public class MQBroker {
         }
     }
 
+
     public static void main(String[] args) {
+//        List<BrokerStrategy> brokerStrategyList = new ArrayList<>();
+//
+//        List<RemoteClientInfo> clientInfoList = new ArrayList<>();
+//        BrokerStrategyA brokerStrategyA = new BrokerStrategyA(clientInfoList);
+//        //brokerStrategyList.add(brokerStrategyA);
+//
+//        List<String> stringList = new ArrayList<>();
+//        stringList.add("demo_1");
+//        BrokerStrategyB brokerStrategyB = new BrokerStrategyB(stringList);
+//        brokerStrategyList.add(brokerStrategyB);
         MQBroker mqBroker = new MQBroker(8080);
-        mqBroker.run(1);
+        mqBroker.run();
+
+
 
     }
 

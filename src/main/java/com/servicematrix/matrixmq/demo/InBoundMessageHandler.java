@@ -1,8 +1,8 @@
 package com.servicematrix.matrixmq.demo;
 
 import com.servicematrix.matrixmq.client.MessageConsumer;
+import com.servicematrix.matrixmq.msg.broker.BrokerMessage;
 import com.servicematrix.matrixmq.msg.client.RequestMessage;
-import com.servicematrix.matrixmq.msg.client.ResponseMessage;
 
 public class InBoundMessageHandler extends MessageConsumer {
     @Override
@@ -11,8 +11,9 @@ public class InBoundMessageHandler extends MessageConsumer {
         return null;
     }
 
+
     @Override
-    public void checkBindMessage(ResponseMessage responseMessage) {
-        System.out.println(responseMessage.toString());
+    public void checkBindMessage(BrokerMessage brokerMessage) {
+        System.out.println(brokerMessage.toString());
     }
 }

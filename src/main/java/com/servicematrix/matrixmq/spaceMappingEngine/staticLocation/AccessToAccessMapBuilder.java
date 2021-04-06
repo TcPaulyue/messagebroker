@@ -1,7 +1,6 @@
 package com.servicematrix.matrixmq.spaceMappingEngine.staticLocation;
 
 
-
 import com.servicematrix.matrixmq.spaceMappingEngine.model.Access;
 import com.servicematrix.matrixmq.spaceMappingEngine.model.AccessToAccessNode;
 import com.servicematrix.matrixmq.spaceMappingEngine.model.Floor;

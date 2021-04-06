@@ -1,12 +1,24 @@
 package com.servicematrix.matrixmq.broker.strategy;
 
-import com.servicematrix.matrixmq.broker.RemoteClientInfo;
 import com.servicematrix.matrixmq.msg.client.RequestMessage;
-import io.netty.channel.Channel;
 
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
-public interface BrokerStrategy {
-    List<Channel> routing(RequestMessage requestMessage, ConcurrentHashMap<String, RemoteClientInfo> hashMap);
+public abstract class BrokerStrategy<T,S> {
+    private T t;
+
+    public BrokerStrategy(T t) {
+        this.t = t;
+    }
+
+    abstract List<S> routing(RequestMessage requestMessage);
+
+
+    public T getT() {
+        return t;
+    }
+
+    public void setT(T t) {
+        this.t = t;
+    }
 }

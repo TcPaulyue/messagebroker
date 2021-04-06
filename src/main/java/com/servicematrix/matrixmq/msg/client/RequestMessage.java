@@ -1,8 +1,11 @@
 package com.servicematrix.matrixmq.msg.client;
 
 import com.servicematrix.matrixmq.msg.BaseMessage;
+import io.netty.channel.ChannelId;
 
 public abstract class RequestMessage extends BaseMessage {
+    private ChannelId channelId;
+
     private RequestHeader requestHeader;
     private RequestBody requestBody;
 
@@ -20,6 +23,14 @@ public abstract class RequestMessage extends BaseMessage {
                 "requestHeader=" + requestHeader.toString() +
                 ", requestBody=" + requestBody.toString() +
                 "} " + super.toString();
+    }
+
+    public ChannelId getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(ChannelId channelId) {
+        this.channelId = channelId;
     }
 
     public RequestHeader getRequestHeader() {

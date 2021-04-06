@@ -9,12 +9,9 @@ public class RequestHeader {
 
     private Location location;
 
-    private String topic;
-
-    public RequestHeader(long time, Location location, String topic) {
+    public RequestHeader(long time, Location location) {
         this.time = time;
         this.location = location;
-        this.topic = topic;
     }
 
     public RequestHeader() {
@@ -36,13 +33,6 @@ public class RequestHeader {
         this.location = location;
     }
 
-    public String getTopic() {
-        return topic;
-    }
-
-    public void setTopic(String topic) {
-        this.topic = topic;
-    }
 
     @Override
     public String toString() {
@@ -50,7 +40,6 @@ public class RequestHeader {
                 "msgId='" + msgId + '\'' +
                 ", time=" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time) +
                 ", location=" + location.toString() +
-                ", topic='" + topic + '\'' +
                 '}';
     }
 

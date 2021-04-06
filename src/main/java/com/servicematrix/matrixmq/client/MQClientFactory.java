@@ -13,7 +13,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 
 
 public class MQClientFactory {
-    private boolean connected = false;
+    private volatile boolean connected = false;
 
     private String brokerHost;
 
@@ -64,7 +64,6 @@ public class MQClientFactory {
                     messageChannel = future;
                     System.out.println(messageChannel.channel().localAddress().toString()+"  已连接...");
                 }
-
             });
             connected = true;
         } catch (InterruptedException e) {
@@ -82,6 +81,8 @@ public class MQClientFactory {
             }
         }
     }
+
+
 
 
 
