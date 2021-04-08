@@ -6,26 +6,26 @@
   <component name="ChangeListManager">
     <list default="true" id="9ebdaa13-3f96-4501-a32e-f75347491d39" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/broker/AckBindController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/broker/AckBindController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/broker/MQBroker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/broker/MQBroker.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/broker/MessageBrokerHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/broker/MessageBrokerHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/broker/RequestMessageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/broker/RequestMessageController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/broker/applicationContext/ApplicationContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/broker/applicationContext/ApplicationContext.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/broker/clientCluster/RemoteClientCluster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/broker/clientCluster/RemoteClientCluster.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/client/MQClientFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/client/MQClientFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/broker/clientCluster/RemoteClientInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/broker/clientCluster/RemoteClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/broker/strategy/BrokerStrategyA.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/broker/strategy/FanoutStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/client/AppContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/client/AppContext.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/client/MessageConsumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/client/MessageConsumer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/demo/DemoClient1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/demo/DemoClient1.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/demo/InBoundMessageHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/demo/InBoundMessageHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/broker/AckBindController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/broker/AckBindController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/broker/MQBroker$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/broker/MQBroker$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/broker/MQBroker.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/broker/MQBroker.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/broker/MessageBrokerHandler$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/broker/MessageBrokerHandler$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/broker/MessageBrokerHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/broker/MessageBrokerHandler.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/broker/RequestMessageController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/broker/RequestMessageController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/broker/applicationContext/ApplicationContextCluster.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/broker/applicationContext/ApplicationContextCluster.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/broker/applicationContext/ApplicationContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/broker/applicationContext/ApplicationContext.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/broker/clientCluster/RemoteClientCluster.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/broker/clientCluster/RemoteClientCluster.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/client/MQClientFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/client/MQClientFactory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/client/MessageConsumer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/client/MessageConsumer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/broker/clientCluster/RemoteClientInfo.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/broker/strategy/BrokerStrategyA.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/demo/DemoClient1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/demo/DemoClient1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/demo/InBoundMessageHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/demo/InBoundMessageHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/msg/client/AppContextMessage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/servicematrix/matrixmq/msg/client/AppContextMessage.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -246,7 +246,7 @@
       <recent name="$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/netty" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.MQBroker">
+  <component name="RunManager" selected="Application.DemoClient0">
     <configuration name="DemoClient0" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.servicematrix.matrixmq.demo.DemoClient0" />
       <module name="matrixMQ" />
@@ -304,9 +304,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.DemoClient1" />
         <item itemvalue="Application.DemoClient0" />
         <item itemvalue="Application.MQBroker" />
-        <item itemvalue="Application.DemoClient1" />
       </list>
     </recent_temporary>
   </component>
@@ -333,7 +333,7 @@
       <workItem from="1616504720629" duration="1492000" />
       <workItem from="1617170159308" duration="1767000" />
       <workItem from="1617597550132" duration="13499000" />
-      <workItem from="1617628457664" duration="15107000" />
+      <workItem from="1617628457664" duration="18508000" />
     </task>
     <servers />
   </component>
@@ -388,7 +388,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/client/MessageConsumer.java</url>
-          <line>30</line>
+          <line>31</line>
           <properties class="com.servicematrix.matrixmq.client.MessageConsumer" method="checkBindMessage">
             <option name="EMULATED" value="true" />
           </properties>
@@ -400,9 +400,24 @@
           <option name="timeStamp" value="46" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/broker/strategy/FanoutStrategy.java</url>
+          <line>24</line>
+          <option name="timeStamp" value="55" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/broker/RequestMessageController.java</url>
-          <line>53</line>
-          <option name="timeStamp" value="52" />
+          <line>62</line>
+          <option name="timeStamp" value="56" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/broker/RequestMessageController.java</url>
+          <line>63</line>
+          <option name="timeStamp" value="57" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/servicematrix/matrixmq/broker/RequestMessageController.java</url>
+          <line>65</line>
+          <option name="timeStamp" value="58" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -2,16 +2,12 @@ package com.servicematrix.matrixmq.broker;
 
 import com.servicematrix.matrixmq.broker.applicationContext.ApplicationContext;
 import com.servicematrix.matrixmq.broker.applicationContext.ApplicationContextCluster;
-import com.servicematrix.matrixmq.broker.clientCluster.RemoteClientCluster;
-import com.servicematrix.matrixmq.broker.clientCluster.RemoteClientInfo;
-import com.servicematrix.matrixmq.broker.strategy.BrokerStrategy;
-import com.servicematrix.matrixmq.broker.strategy.BrokerStrategyA;
-import com.servicematrix.matrixmq.broker.strategy.BrokerStrategyBuilder;
+import com.servicematrix.matrixmq.broker.clientCluster.RemoteClient;
+import com.servicematrix.matrixmq.broker.strategy.FanoutStrategy;
 import com.servicematrix.matrixmq.msg.client.RequestMessage;
 import io.netty.channel.ChannelId;
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -67,25 +63,25 @@ public class RequestMessageController implements Runnable {
                 logger.info("Thread-ReqMsgHandler-"+applicationCtxId+" "+requestMessage.toString());
                 Set<ChannelId> channelIds = applicationContext.getchannelIdSet();
 
-                if(channelIds.size()<=0){
+                if(channelIds.size()<=1){
                     applicationContext.pushRequestMessage(requestMessage);
                     continue;
                 }
-                List<RemoteClientInfo> remoteClientInfos = applicationContext.getRemoteClientInfos();
-                remoteClientInfos.forEach(remoteClientInfo -> {
+                List<RemoteClient> remoteClients = applicationContext.getRemoteClients();
+                remoteClients.forEach(remoteClientInfo -> {
                     remoteClientInfo.getChannel().writeAndFlush(requestMessage).addListener(future -> {
                         if(future.isSuccess()){
                             logger.info("Thread-ReqMsgHandler-"+applicationCtxId+" "+"send Msg: "+requestMessage.getRequestHeader().getMsgId()+" to "+remoteClientInfo.getChannel().remoteAddress());
                         }
                     });
                 });
-//                BrokerStrategyA brokerStrategyA = new BrokerStrategyA(remoteClientInfos);
-//                List<String> keys = brokerStrategyBuilder.getBinderList(requestMessage,brokerStrategyList);
-//                ApplicationContextCluster.getChannelsByTopic(topic).forEach((key, value)->{
-//                    if(keys.contains(key) && value.isConnected())
-//                        value.getChannel().writeAndFlush(requestMessage);
-////                    if(!key.equals(requestMessage.getRequestHeader().getMsgId()) && value.isConnected())
-////                        value.getChannel().writeAndFlush(requestMessage);
+//                FanoutStrategy fanoutStrategy = new FanoutStrategy(remoteClients);
+//                fanoutStrategy.routing(requestMessage).forEach(channel -> {
+//                    channel.writeAndFlush(requestMessage).addListener(future -> {
+//                        if(future.isSuccess()){
+//                            logger.info("Thread-ReqMsgHandler-"+applicationCtxId+" "+"send Msg: "+requestMessage.getRequestHeader().getMsgId()+" to "+channel.remoteAddress());
+//                        }
+//                    });
 //                });
             }
         }

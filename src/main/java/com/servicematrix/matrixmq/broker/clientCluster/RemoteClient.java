@@ -4,12 +4,12 @@ import com.servicematrix.matrixmq.msg.client.Location;
 import io.netty.channel.Channel;
 
 
-public class RemoteClientInfo {
+public class RemoteClient {
     private Channel channel;
     private boolean isConnected;
     private Location location;
 
-    public RemoteClientInfo(Location location,Channel channel) {
+    public RemoteClient(Location location, Channel channel) {
         this.location = location;
         this.channel = channel;
     }

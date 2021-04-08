@@ -55,10 +55,19 @@ public class MessageBrokerHandler extends ChannelInboundHandlerAdapter {
             case UNBIND:
                 UnBindMessage unBindMessage = (UnBindMessage)message;
                 RemoteClientCluster.removeClient(unBindMessage,ctx.channel());
-
                 break;
         }
         //ctx.writeAndFlush(message);
+    }
+
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        super.channelActive(ctx);
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        super.channelInactive(ctx);
     }
 
     @Override

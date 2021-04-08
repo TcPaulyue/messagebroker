@@ -1,7 +1,7 @@
 package com.servicematrix.matrixmq.broker.applicationContext;
 
 import com.servicematrix.matrixmq.broker.clientCluster.RemoteClientCluster;
-import com.servicematrix.matrixmq.broker.clientCluster.RemoteClientInfo;
+import com.servicematrix.matrixmq.broker.clientCluster.RemoteClient;
 import com.servicematrix.matrixmq.msg.client.RequestMessage;
 import io.netty.channel.ChannelId;
 import io.netty.util.internal.ConcurrentSet;
@@ -50,13 +50,13 @@ public class ApplicationContext {
         return messageQueue.poll();
     }
 
-    public synchronized List<RemoteClientInfo> getRemoteClientInfos(){
-        List<RemoteClientInfo> remoteClientInfos = new ArrayList<>();
+    public synchronized List<RemoteClient> getRemoteClients(){
+        List<RemoteClient> remoteClients = new ArrayList<>();
         this.channelIdSet.forEach(channelId -> {
             if(RemoteClientCluster.getClientCluster().containsKey(channelId)){
-                remoteClientInfos.add(RemoteClientCluster.getClientCluster().get(channelId));
+                remoteClients.add(RemoteClientCluster.getClientCluster().get(channelId));
             }
         });
-        return remoteClientInfos;
+        return remoteClients;
     }
 }

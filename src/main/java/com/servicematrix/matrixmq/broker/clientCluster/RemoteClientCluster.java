@@ -13,21 +13,21 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class RemoteClientCluster {
 
-    private static Map<ChannelId,RemoteClientInfo> clientCluster = new ConcurrentHashMap<>();
+    private static Map<ChannelId, RemoteClient> clientCluster = new ConcurrentHashMap<>();
 
-    public static Map<ChannelId, RemoteClientInfo> getClientCluster() {
+    public static Map<ChannelId, RemoteClient> getClientCluster() {
         return clientCluster;
     }
 
-    public static void setClientCluster(Map<ChannelId, RemoteClientInfo> clientCluster) {
+    public static void setClientCluster(Map<ChannelId, RemoteClient> clientCluster) {
         RemoteClientCluster.clientCluster = clientCluster;
     }
 
     public static synchronized void addClient(BindMessage bindMessage, Channel channel){
-        RemoteClientInfo remoteClientInfo = new RemoteClientInfo(bindMessage.getRequestHeader().getLocation(), channel);
-        remoteClientInfo.setConnected(true);
+        RemoteClient remoteClient = new RemoteClient(bindMessage.getRequestHeader().getLocation(), channel);
+        remoteClient.setConnected(true);
         if(!clientCluster.containsKey(channel.id())){
-            clientCluster.put(channel.id(),remoteClientInfo);
+            clientCluster.put(channel.id(), remoteClient);
         }else return;
     }
 
@@ -45,14 +45,14 @@ public class RemoteClientCluster {
         clientCluster.get(channel.id()).setConnected(false);
     }
 
-    public static synchronized List<RemoteClientInfo> getConnectedClientList(){
-        List<RemoteClientInfo> remoteClientInfos = new ArrayList<>();
+    public static synchronized List<RemoteClient> getConnectedClientList(){
+        List<RemoteClient> remoteClients = new ArrayList<>();
         clientCluster.forEach((key,value)->{
             if(value.isConnected()){
-                remoteClientInfos.add(value);
+                remoteClients.add(value);
             }
         });
-        return remoteClientInfos;
+        return remoteClients;
     }
 
     public static Channel getChannel(ChannelId channelId){

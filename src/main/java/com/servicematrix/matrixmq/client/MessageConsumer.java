@@ -14,6 +14,7 @@ public abstract class MessageConsumer {
         logger.info("messageConsumer:    "+baseMessage.toString());
         switch (baseMessage.getMessageType()){
             case REQUEST:
+
                 response = this.checkRequestMessage((RequestMessage)baseMessage);
                 break;
             case BROKER_ACK_BIND:
