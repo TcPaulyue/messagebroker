@@ -37,6 +37,10 @@ public class RemoteClientCluster {
         }
     }
 
+    public static synchronized boolean getClientState(Channel channel){
+        return clientCluster.get(channel.id()).isConnected();
+    }
+
     public static synchronized void deleteClient(Channel channel){
         clientCluster.get(channel.id()).setConnected(false);
     }

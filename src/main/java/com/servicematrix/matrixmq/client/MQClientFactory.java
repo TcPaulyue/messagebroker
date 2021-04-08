@@ -10,6 +10,7 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import org.apache.log4j.Logger;
 
 
 public class MQClientFactory {
@@ -18,6 +19,8 @@ public class MQClientFactory {
     private String brokerHost;
 
     private int brokerPort;
+
+    private static final Logger logger = Logger.getLogger(MQClientFactory.class);
 
     private static KryoCodecUtil util = new KryoCodecUtil(KryoPoolFactory.getKryoPoolInstance());
 
@@ -62,7 +65,7 @@ public class MQClientFactory {
             channelFuture.addListener((ChannelFutureListener) future -> {
                 if(future.isSuccess()){
                     messageChannel = future;
-                    System.out.println(messageChannel.channel().localAddress().toString()+"  已连接...");
+                    logger.info(messageChannel.channel().localAddress().toString()+" bind to broker...");
                 }
             });
             connected = true;

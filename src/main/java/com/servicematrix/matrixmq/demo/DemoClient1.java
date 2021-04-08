@@ -9,7 +9,7 @@ public class DemoClient1 {
         MQClient mqClient = new MQClient(new Location(1.0,2.0,3.0),"demo1","localhost",8080,new InBoundMessageHandler());
         mqClient.init();
         mqClient.bind();
-        AppContext appContext = new AppContext("appCtx0",mqClient);
+        AppContext appContext = new AppContext("appCtx1",mqClient);
         appContext.init();
         appContext.sendMessage("turn on my light.");
 

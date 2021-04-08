@@ -2,6 +2,7 @@ package com.servicematrix.matrixmq.broker;
 
 import com.servicematrix.matrixmq.broker.clientCluster.RemoteClientInfo;
 import com.servicematrix.matrixmq.broker.strategy.*;
+import com.servicematrix.matrixmq.client.MQClient;
 import com.servicematrix.matrixmq.netty.RequestDataDecoder;
 import com.servicematrix.matrixmq.netty.ResponseDataEncoder;
 import com.servicematrix.matrixmq.serialize.KryoCodecUtil;
@@ -11,17 +12,15 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.logging.Logger;
 
 import static com.servicematrix.matrixmq.broker.MessageBrokerHandler.executorService;
 
 public class MQBroker {
     public static final String BROKERID = "MATRIXMQ_01";
+
+    private static final Logger logger = Logger.getLogger(MQBroker.class);
 
     private final int port;
 
@@ -57,12 +56,12 @@ public class MQBroker {
                 f = b.bind(port).sync();
                 f.addListener((ChannelFutureListener) channelFuture -> {
                     if(channelFuture.isDone()){
-                        System.out.println("bind port.");
+                        logger.info("broker-"+BROKERID+" bind port:"+port);
                     }
                     if(channelFuture.isSuccess()){
-                        System.out.println("bind port succeed.");
+                        logger.info("broker-"+BROKERID+" bind port:"+port+" succeed.");
                     }else{
-                        System.out.println("bind port failed");
+                        logger.info("broker-"+BROKERID+" bind port:"+port+" failed.");
                     }
                 });
                 isRunning = true;

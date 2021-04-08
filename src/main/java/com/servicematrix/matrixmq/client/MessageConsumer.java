@@ -11,7 +11,7 @@ public abstract class MessageConsumer {
 
     BaseMessage handleMessage(BaseMessage baseMessage){
         BaseMessage response = null;
-        logger.info("messageConsumer    "+baseMessage.toString());
+        logger.info("messageConsumer:    "+baseMessage.toString());
         switch (baseMessage.getMessageType()){
             case REQUEST:
                 response = this.checkRequestMessage((RequestMessage)baseMessage);

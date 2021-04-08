@@ -1,7 +1,6 @@
 package com.servicematrix.matrixmq.msg.client;
 
 import com.servicematrix.matrixmq.msg.MessageType;
-import io.netty.channel.ChannelId;
 
 public class AppContextMessage extends RequestMessage {
     private String AppContextId;

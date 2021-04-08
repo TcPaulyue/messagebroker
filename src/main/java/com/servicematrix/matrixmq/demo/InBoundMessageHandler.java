@@ -7,13 +7,13 @@ import com.servicematrix.matrixmq.msg.client.RequestMessage;
 public class InBoundMessageHandler extends MessageConsumer {
     @Override
     public RequestMessage checkRequestMessage(RequestMessage requestMessage) {
-        System.out.println(requestMessage.toString());
+        //System.out.println(requestMessage.toString());
         return null;
     }
 
 
     @Override
     public void checkBindMessage(BrokerMessage brokerMessage) {
-        System.out.println(brokerMessage.toString());
+        //System.out.println(brokerMessage.toString());
     }
 }
