@@ -11,7 +11,14 @@ public class DemoClient1 {
         mqClient.bind();
         AppContext appContext = new AppContext("appCtx0",mqClient);
         appContext.init();
-        appContext.sendMessage("turn on my light.");
+        while(true){
+            appContext.sendMessage("turn on my light.");
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
 //        mqClient.unbind();
 //        mqClient.bind();

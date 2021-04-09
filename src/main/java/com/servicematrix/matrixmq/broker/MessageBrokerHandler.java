@@ -2,12 +2,12 @@ package com.servicematrix.matrixmq.broker;
 
 import com.servicematrix.matrixmq.broker.applicationContext.ApplicationContextCluster;
 import com.servicematrix.matrixmq.broker.clientCluster.RemoteClientCluster;
-import com.servicematrix.matrixmq.client.MessageConsumer;
+import com.servicematrix.matrixmq.broker.protocol.ProtocolProcess;
 import com.servicematrix.matrixmq.msg.BaseMessage;
 import com.servicematrix.matrixmq.msg.client.AppContextMessage;
-import com.servicematrix.matrixmq.msg.client.BindMessage;
-import com.servicematrix.matrixmq.msg.client.Request;
-import com.servicematrix.matrixmq.msg.client.UnBindMessage;
+import com.servicematrix.matrixmq.msg.client.ConnectMessage;
+import com.servicematrix.matrixmq.msg.client.DisConnectMessage;
+import com.servicematrix.matrixmq.msg.client.PublishMessage;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -18,43 +18,35 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class MessageBrokerHandler extends ChannelInboundHandlerAdapter {
 
     private static final Logger logger = Logger.getLogger(MessageBrokerHandler.class);
-    public static ThreadPoolExecutor executorService = (ThreadPoolExecutor) Executors.newFixedThreadPool(4);
+
+    private ProtocolProcess protocolProcess;
+
+    public MessageBrokerHandler(ProtocolProcess protocolProcess) {
+        this.protocolProcess = protocolProcess;
+    }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         BaseMessage message = (BaseMessage)msg;
         switch (message.getMessageType()){
-            case BIND:
-                logger.info("new client "+ctx.channel().remoteAddress()+" bind");
-                BindMessage bindMessage = (BindMessage)message;
-                bindMessage.setChannelId(ctx.channel().id());
-                RemoteClientCluster.addClient(bindMessage,ctx.channel());
-                AckBindQueue.pushBindMessage(bindMessage);
+            case CONNECT:
+                logger.info("new client "+ctx.channel().remoteAddress()+" Connect");
+                protocolProcess.connect().processConnect(ctx.channel(),(ConnectMessage)message);
                 break;
             case APPLICATIONCONTEXT:
                 AppContextMessage appContextMessage = (AppContextMessage)message;
-                appContextMessage.setChannelId(ctx.channel().id());
                 logger.info(ctx.channel().remoteAddress()+" add new appCtx:/ "+ appContextMessage.getAppContextId());
-                if(!RemoteClientCluster.getClientState(ctx.channel())){
-                    logger.error("client unbind to broker");
-                    break;
-                }
-                if(ApplicationContextCluster.addApplicationContext(appContextMessage,ctx.channel())){
-                    executorService.execute(new RequestMessageController(appContextMessage.getAppContextId()));
-                }
-                //System.out.println(executorService.getActiveCount());
+                protocolProcess.subscribe().processSubscribe(ctx.channel(),appContextMessage);
                 break;
-            case REQUEST:
-                Request request = (Request)message;
-                logger.info("appCtx: "+request.getAppContextId() + "/  client: "+ctx.channel().remoteAddress()
-                    + "/ msg: "+((Request) message).getRequestBody());
-           //     LevelOneMessageCache.pushRequestMessage(request);
-                ApplicationContextCluster.getApplicationContextMap().get(request.getAppContextId())
-                        .pushRequestMessage(request);
+            case PUBLISH:
+                PublishMessage publishMessage = (PublishMessage)message;
+                logger.info("appCtx: "+ publishMessage.getAppContextId() + "/  client: "+ctx.channel().remoteAddress()
+                    + "/ msg: "+((PublishMessage) message).getRequestBody());
+                protocolProcess.publish().processPublish(publishMessage);
                 break;
-            case UNBIND:
-                UnBindMessage unBindMessage = (UnBindMessage)message;
-                RemoteClientCluster.removeClient(unBindMessage,ctx.channel());
+            case DISCONNECT:
+                logger.info("Netty:client "+ctx.channel().remoteAddress()+" disConnect...");
+                protocolProcess.disConnect().processDisConnect(ctx.channel(),(DisConnectMessage) message);
                 break;
         }
         //ctx.writeAndFlush(message);
@@ -63,6 +55,7 @@ public class MessageBrokerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
+
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.servicematrix.matrixmq.broker;
 
+import com.servicematrix.matrixmq.broker.protocol.ProtocolProcess;
 import com.servicematrix.matrixmq.netty.RequestDataDecoder;
 import com.servicematrix.matrixmq.netty.ResponseDataEncoder;
 import com.servicematrix.matrixmq.serialize.KryoCodecUtil;
@@ -11,8 +12,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import org.apache.log4j.Logger;
 
-
-import static com.servicematrix.matrixmq.broker.MessageBrokerHandler.executorService;
+import static com.servicematrix.matrixmq.broker.protocol.Subscribe.executorService;
 
 public class MQBroker {
     public static final String BROKERID = "MATRIXMQ_01";
@@ -43,7 +43,7 @@ public class MQBroker {
                             ch.pipeline().addLast(
                                     new RequestDataDecoder(util),
                                     new ResponseDataEncoder(util),
-                                    new MessageBrokerHandler());
+                                    new MessageBrokerHandler(new ProtocolProcess()));
                         }
                     }).option(ChannelOption.SO_BACKLOG, 128)
                     .childOption(ChannelOption.SO_KEEPALIVE, true);
@@ -65,7 +65,7 @@ public class MQBroker {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            executorService.execute(new AckBindController());
+            executorService.execute(new AckConnectController());
             f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();

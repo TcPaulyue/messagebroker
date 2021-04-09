@@ -2,7 +2,7 @@ package com.servicematrix.matrixmq.client;
 
 
 import com.servicematrix.matrixmq.msg.client.AppContextMessage;
-import com.servicematrix.matrixmq.msg.client.Request;
+import com.servicematrix.matrixmq.msg.client.PublishMessage;
 import com.servicematrix.matrixmq.msg.client.RequestBody;
 import com.servicematrix.matrixmq.msg.client.RequestHeader;
 
@@ -34,9 +34,9 @@ public class AppContext {
     }
 
     public void sendMessage(String msg){
-        Request request = new Request(new RequestHeader(),new RequestBody(msg.getBytes()));
-        request.setAppContextId(appContextId);
-        mqClient.sendMessage(request);
+        PublishMessage publishMessage = new PublishMessage(new RequestHeader(),new RequestBody(msg.getBytes()));
+        publishMessage.setAppContextId(appContextId);
+        mqClient.sendMessage(publishMessage);
     }
 
     public void removeAppCtx(){

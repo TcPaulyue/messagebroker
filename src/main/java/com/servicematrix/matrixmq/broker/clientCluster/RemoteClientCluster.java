@@ -1,7 +1,7 @@
 package com.servicematrix.matrixmq.broker.clientCluster;
 
-import com.servicematrix.matrixmq.msg.client.BindMessage;
-import com.servicematrix.matrixmq.msg.client.UnBindMessage;
+import com.servicematrix.matrixmq.msg.client.ConnectMessage;
+import com.servicematrix.matrixmq.msg.client.DisConnectMessage;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelId;
 
@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class RemoteClientCluster {
 
-    private static Map<ChannelId, RemoteClient> clientCluster = new ConcurrentHashMap<>();
+    private static volatile Map<ChannelId, RemoteClient> clientCluster = new ConcurrentHashMap<>();
 
     public static Map<ChannelId, RemoteClient> getClientCluster() {
         return clientCluster;
@@ -23,15 +23,22 @@ public class RemoteClientCluster {
         RemoteClientCluster.clientCluster = clientCluster;
     }
 
-    public static synchronized void addClient(BindMessage bindMessage, Channel channel){
-        RemoteClient remoteClient = new RemoteClient(bindMessage.getRequestHeader().getLocation(), channel);
+    public static synchronized void addClient(ConnectMessage connectMessage, Channel channel){
+        RemoteClient remoteClient = new RemoteClient(connectMessage.getRequestHeader().getLocation(), channel);
         remoteClient.setConnected(true);
         if(!clientCluster.containsKey(channel.id())){
             clientCluster.put(channel.id(), remoteClient);
         }else return;
     }
 
-    public static synchronized void removeClient(UnBindMessage unBindMessage,Channel channel){
+    public static synchronized int getClientsSize(){
+        return clientCluster.size();
+    }
+
+    public static synchronized boolean containsClient(Channel channel){
+        return clientCluster.containsKey(channel.id());
+    }
+    public static synchronized void removeClient(DisConnectMessage disConnectMessage, Channel channel){
         if(clientCluster.containsKey(channel.id())){
             clientCluster.remove(channel.id());
         }
@@ -55,7 +62,10 @@ public class RemoteClientCluster {
         return remoteClients;
     }
 
-    public static Channel getChannel(ChannelId channelId){
-        return clientCluster.get(channelId).getChannel();
+    public static synchronized Channel getChannel(ChannelId channelId){
+        Channel channel = clientCluster.get(channelId).getChannel();
+        if(channel!=null)
+            return clientCluster.get(channelId).getChannel();
+        return null;
     }
 }

@@ -3,11 +3,11 @@ package com.servicematrix.matrixmq.serialize;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.pool.KryoFactory;
 import com.esotericsoftware.kryo.pool.KryoPool;
-import com.servicematrix.matrixmq.msg.broker.AckBindMessage;
+import com.servicematrix.matrixmq.msg.broker.AckConnectMessage;
 import com.servicematrix.matrixmq.msg.client.AppContextMessage;
-import com.servicematrix.matrixmq.msg.client.BindMessage;
-import com.servicematrix.matrixmq.msg.client.Request;
-import com.servicematrix.matrixmq.msg.client.UnBindMessage;
+import com.servicematrix.matrixmq.msg.client.ConnectMessage;
+import com.servicematrix.matrixmq.msg.client.PublishMessage;
+import com.servicematrix.matrixmq.msg.client.DisConnectMessage;
 import org.objenesis.strategy.StdInstantiatorStrategy;
 
 public class KryoPoolFactory {
@@ -18,10 +18,10 @@ public class KryoPoolFactory {
         Kryo kryo = new Kryo();
         kryo.setReferences(false);
         kryo.register(AppContextMessage.class);
-        kryo.register(AckBindMessage.class);
-        kryo.register(Request.class);
-        kryo.register(BindMessage.class);
-        kryo.register(UnBindMessage.class);
+        kryo.register(AckConnectMessage.class);
+        kryo.register(PublishMessage.class);
+        kryo.register(ConnectMessage.class);
+        kryo.register(DisConnectMessage.class);
         kryo.setInstantiatorStrategy(new StdInstantiatorStrategy());
         return kryo;
     };

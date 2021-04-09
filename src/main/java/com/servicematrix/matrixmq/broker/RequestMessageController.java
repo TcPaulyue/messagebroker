@@ -3,7 +3,6 @@ package com.servicematrix.matrixmq.broker;
 import com.servicematrix.matrixmq.broker.applicationContext.ApplicationContext;
 import com.servicematrix.matrixmq.broker.applicationContext.ApplicationContextCluster;
 import com.servicematrix.matrixmq.broker.clientCluster.RemoteClient;
-import com.servicematrix.matrixmq.broker.strategy.FanoutStrategy;
 import com.servicematrix.matrixmq.msg.client.RequestMessage;
 import io.netty.channel.ChannelId;
 import org.apache.log4j.Logger;
@@ -14,7 +13,7 @@ import java.util.Set;
 public class RequestMessageController implements Runnable {
     private volatile boolean stopped = false;
 
-    private static final Logger logger = Logger.getLogger(AckBindController.class);
+    private static final Logger logger = Logger.getLogger(AckConnectController.class);
 
     private final ApplicationContext applicationContext;
 
@@ -62,8 +61,7 @@ public class RequestMessageController implements Runnable {
             if(requestMessage!=null){
                 logger.info("Thread-ReqMsgHandler-"+applicationCtxId+" "+requestMessage.toString());
                 Set<ChannelId> channelIds = applicationContext.getchannelIdSet();
-
-                if(channelIds.size()<=1){
+                if(channelIds.size()<=0){
                     applicationContext.pushRequestMessage(requestMessage);
                     continue;
                 }

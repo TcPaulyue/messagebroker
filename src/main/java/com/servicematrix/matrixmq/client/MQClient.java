@@ -42,7 +42,7 @@ public class MQClient {
     }
 
     public boolean bind(){
-        BindMessage bindMessage = new BindMessage();
+        ConnectMessage bindMessage = new ConnectMessage();
         RequestHeader requestHeader = new RequestHeader();
         requestHeader.setMsgId(msgId);
         requestHeader.setLocation(location);
@@ -64,15 +64,16 @@ public class MQClient {
     }
 
     public boolean unbind(){
-        UnBindMessage unBindMessage = new UnBindMessage();
+        DisConnectMessage disConnectMessage = new DisConnectMessage();
         RequestHeader requestHeader = new RequestHeader();
         requestHeader.setMsgId(msgId);
         requestHeader.setLocation(location);
         requestHeader.setTime(System.currentTimeMillis());
-        unBindMessage.setRequestHeader(requestHeader);
-        unBindMessage.setRequestBody(new RequestBody("unbind".getBytes()));
-        mqClientFactory.getMessageChannel().channel().writeAndFlush(unBindMessage).addListener(future -> {
-            isConnected = future.isSuccess();
+        disConnectMessage.setRequestHeader(requestHeader);
+        disConnectMessage.setRequestBody(new RequestBody("unbind".getBytes()));
+        mqClientFactory.getMessageChannel().channel().writeAndFlush(disConnectMessage).addListener(future -> {
+            if(future.isSuccess())
+                isConnected = false;
         });
         while(isConnected){
             logger.info("wait for disconnecting...");
@@ -100,7 +101,7 @@ public class MQClient {
         msg.getRequestHeader().setMsgId(msgId);
         msg.getRequestHeader().setLocation(location);
         msg.getRequestHeader().setTime(System.currentTimeMillis());
-        mqClientFactory.getMessageChannel().channel().writeAndFlush((Request)msg);
+        mqClientFactory.getMessageChannel().channel().writeAndFlush((PublishMessage)msg);
     }
 
     public void shutdown(){
